@@ -1,0 +1,32 @@
+﻿// ------------------------------------------------------------------------
+// Shin开发平台
+// 版 本：V1.0
+// 版 权：Shin
+// 作 者：Shin
+// 邮 箱：shin_l@126.com
+// ------------------------------------------------------------------------
+
+namespace @(Model.NameSpace);
+
+/// <summary>
+/// @(Model.BusName)输出参数
+/// </summary>
+public class @(Model.ClassName)Dto
+{
+@foreach (var column in Model.TableField){
+if(column.EffectType == "ForeignKey"){
+    @:/// <summary>
+    @:/// @column.ColumnComment
+    @:/// </summary>
+    @:public string @(column.PropertyName)FkColumn { get; set; }
+    @:
+}
+}
+@foreach (var column in Model.TableField){
+    @:/// <summary>
+    @:/// @column.ColumnComment
+    @:/// </summary>
+    @:public @column.NetType @column.PropertyName { get; set; }
+    @:
+}
+}

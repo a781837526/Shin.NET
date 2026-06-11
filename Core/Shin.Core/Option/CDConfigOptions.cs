@@ -1,0 +1,86 @@
+﻿// ------------------------------------------------------------------------
+// Shin开发平台
+// 版 本：V1.0
+// 版 权：Shin
+// 作 者：Shin
+// 邮 箱：shin_l@126.com
+// ------------------------------------------------------------------------
+
+namespace Shin.Core;
+
+/// <summary>
+/// CI/CD 配置选项
+/// </summary>
+public class CDConfigOptions : IConfigurableOptions
+{
+    /// <summary>
+    /// 是否启用
+    /// </summary>
+    public bool Enabled { get; set; }
+
+    /// <summary>
+    /// 用户名
+    /// </summary>
+    public string Owner { get; set; }
+
+    /// <summary>
+    /// 仓库名
+    /// </summary>
+    public string Repo { get; set; }
+
+    /// <summary>
+    /// 分支名
+    /// </summary>
+    public string Branch { get; set; }
+
+    /// <summary>
+    /// 用户授权码
+    /// </summary>
+    public string AccessToken { get; set; }
+
+    /// <summary>
+    /// 更新间隔限制（分钟）0 不限制
+    /// </summary>
+    public int UpdateInterval { get; set; }
+
+    /// <summary>
+    /// 保留备份文件的数量, 0 不限制
+    /// </summary>
+    public int BackupCount { get; set; }
+
+    /// <summary>
+    /// 输出目录配置
+    /// </summary>
+    public string BackendOutput { get; set; }
+
+    /// <summary>
+    /// 发布配置选项
+    /// </summary>
+    public PublishOptions Publish { get; set; }
+
+    /// <summary>
+    /// 排除文件列表
+    /// </summary>
+    public List<string> ExcludeFiles { get; set; }
+}
+
+/// <summary>
+/// 编译发布配置选项
+/// </summary>
+public class PublishOptions
+{
+    /// <summary>
+    /// 发布环境配置
+    /// </summary>
+    public string Configuration { get; set; }
+
+    /// <summary>
+    /// 目标框架
+    /// </summary>
+    public string TargetFramework { get; set; }
+
+    /// <summary>
+    /// 运行环境
+    /// </summary>
+    public string RuntimeIdentifier { get; set; }
+}

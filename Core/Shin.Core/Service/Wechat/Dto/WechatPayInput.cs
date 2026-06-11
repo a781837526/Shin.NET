@@ -1,0 +1,89 @@
+// ------------------------------------------------------------------------
+// Shin开发平台
+// 版 本：V1.0
+// 版 权：Shin
+// 作 者：Shin
+// 邮 箱：shin_l@126.com
+// ------------------------------------------------------------------------
+
+namespace Shin.Core;
+
+public class WechatPayTransactionInput
+{
+    /// <summary>
+    /// OpenId
+    /// </summary>
+    public string OpenId { get; set; }
+
+    /// <summary>
+    /// 订单金额
+    /// </summary>
+    public int Total { get; set; }
+
+    /// <summary>
+    /// 商品描述
+    /// </summary>
+    public string Description { get; set; }
+
+    /// <summary>
+    /// 附加数据
+    /// </summary>
+    public string Attachment { get; set; }
+
+    /// <summary>
+    /// 优惠标记
+    /// </summary>
+    public string GoodsTag { get; set; }
+
+    /// <summary>
+    /// 业务标签，用来区分做什么业务
+    /// </summary>
+    public string Tags { get; set; }
+
+    /// <summary>
+    /// 对应业务的主键
+    /// </summary>
+    public long BusinessId { get; set; }
+}
+
+public class WechatPayParaInput
+{
+    /// <summary>
+    /// 订单Id
+    /// </summary>
+    public string PrepayId { get; set; }
+}
+
+public class WechatPayRefundDomesticInput
+{
+    /// <summary>
+    /// 商户端生成的业务流水号
+    /// </summary>
+    [Required]
+    public string TradeId { get; set; }
+
+    /// <summary>
+    /// 退款原因
+    /// </summary>
+    public string Reason { get; set; }
+
+    /// <summary>
+    /// 退款金额
+    /// </summary>
+    [Required]
+    public int Refund { get; set; }
+
+    /// <summary>
+    /// 原订单金额
+    /// </summary>
+    [Required]
+    public int Total { get; set; }
+}
+
+public class WechatPayPageInput : BasePageInput
+{
+    /// <summary>
+    /// 添加时间范围
+    /// </summary>
+    public List<DateTime?> CreateTimeRange { get; set; }
+}

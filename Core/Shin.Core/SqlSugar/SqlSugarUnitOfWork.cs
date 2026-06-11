@@ -1,0 +1,73 @@
+﻿// ------------------------------------------------------------------------
+// Shin开发平台
+// 版 本：V1.0
+// 版 权：Shin
+// 作 者：Shin
+// 邮 箱：shin_l@126.com
+// ------------------------------------------------------------------------
+
+namespace Shin.Core;
+
+/// <summary>
+/// SqlSugar 事务和工作单元
+/// </summary>
+public sealed class SqlSugarUnitOfWork : IUnitOfWork
+{
+    /// <summary>
+    /// SqlSugar 对象
+    /// </summary>
+    private readonly ISqlSugarClient _sqlSugarClient;
+
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="sqlSugarClient"></param>
+    public SqlSugarUnitOfWork(ISqlSugarClient sqlSugarClient)
+    {
+        _sqlSugarClient = sqlSugarClient;
+    }
+
+    /// <summary>
+    /// 开启工作单元处理
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="unitOfWork"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task BeginTransactionAsync(FilterContext context, UnitOfWorkAttribute unitOfWork)
+    {
+        _sqlSugarClient.AsTenant().BeginTran();
+    }
+
+    /// <summary>
+    /// 提交工作单元处理
+    /// </summary>
+    /// <param name="resultContext"></param>
+    /// <param name="unitOfWork"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task CommitTransactionAsync(FilterContext resultContext, UnitOfWorkAttribute unitOfWork)
+    {
+        _sqlSugarClient.AsTenant().CommitTran();
+    }
+
+    /// <summary>
+    /// 回滚工作单元处理
+    /// </summary>
+    /// <param name="resultContext"></param>
+    /// <param name="unitOfWork"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task RollbackTransactionAsync(FilterContext resultContext, UnitOfWorkAttribute unitOfWork)
+    {
+        _sqlSugarClient.AsTenant().RollbackTran();
+    }
+
+    /// <summary>
+    /// 执行完毕（无论成功失败）
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="resultContext"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task OnCompletedAsync(FilterContext context, FilterContext resultContext)
+    {
+        _sqlSugarClient.Dispose();
+    }
+}

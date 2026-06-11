@@ -1,0 +1,68 @@
+﻿// ------------------------------------------------------------------------
+// Shin开发平台
+// 版 本：V1.0
+// 版 权：Shin
+// 作 者：Shin
+// 邮 箱：shin_l@126.com
+// ------------------------------------------------------------------------
+
+namespace Shin.Core;
+
+public static class SqlSugarFilterExtension
+{
+    /// <summary>
+    /// 根据指定Attribute获取属性
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    private static List<string> GetPropertyNames<T>(this Type type) where T : Attribute
+    {
+        return type.GetProperties()
+            .Where(p => p.CustomAttributes.Any(x => x.AttributeType == typeof(T)))
+            .Select(x => x.Name).ToList();
+    }
+
+    /// <summary>
+    /// 获取过滤表达式
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="type"></param>
+    /// <param name="owners"></param>
+    /// <returns></returns>
+    public static LambdaExpression GetConditionExpression<T>(this Type type, List<long> owners) where T : Attribute
+    {
+        var fieldNames = type.GetPropertyNames<T>();
+        ParameterExpression parameter = Expression.Parameter(type, "c");
+
+        Expression userSelf = Expression.Constant(type.Name == nameof(SysUser));
+        userSelf = Expression.AndAlso(userSelf, Expression.Call(
+            Expression.Constant(owners),
+            nameof(List<long>.Contains),
+            null,
+            Expression.Property(parameter, nameof(SysUser.Id))
+            ));
+
+        Expression right = userSelf;
+        ConstantExpression ownersCollection = Expression.Constant(owners);
+        foreach (var fieldName in fieldNames)
+        {
+            var property = type.GetProperty(fieldName);
+            Expression memberExp = Expression.Property(parameter, property!);
+
+            // 如果属性是可为空的类型，则转换为其基础类型
+            var baseType = Nullable.GetUnderlyingType(property.PropertyType);
+            if (baseType != null) memberExp = Expression.Convert(memberExp, baseType);
+
+            // 调用ownersCollection.Contains方法，检查是否包含属性值
+            right = Expression.OrElse(Expression.Call(
+                typeof(Enumerable),
+                nameof(Enumerable.Contains),
+                new[] { memberExp.Type },
+                ownersCollection,
+                memberExp
+            ), right);
+        }
+        return Expression.Lambda(right, parameter);
+    }
+}

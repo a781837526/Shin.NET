@@ -1,0 +1,76 @@
+// ------------------------------------------------------------------------
+// 先锋桥梁大模型
+// 版 本：V1.0
+// 版 权：中铁大桥局
+// 作 者：
+// 邮 箱：
+// 说 明：@(Model.BusName)输出参数
+// 日 期：
+// ------------------------------------------------------------------------
+
+using Magicodes.ExporterAndImporter.Core;
+namespace @(Model.NameSpace);
+
+/// <summary>
+/// @(Model.BusName)输出参数
+/// </summary>
+public class @(Model.ClassName)Output
+{
+    @foreach (var column in Model.TableField){
+    @:/// <summary>
+    @:/// @column.ColumnComment
+    @:/// </summary>
+    @:public @column.NetType @(column.PropertyName) { get; set; }    
+    if(column.EffectType == "ForeignKey" || column.EffectType == "ApiTreeSelector") {
+    @:
+    @:/// <summary>
+    @:/// @(column.ColumnComment) 描述
+    @:/// </summary>
+    @:public string @(column.ExtendedPropertyName) { get; set; } 
+    }else if(column.EffectType == "Upload" || column.EffectType == "Upload_SingleFile"){
+    @:
+    @:/// <summary>
+    @:/// @(column.ColumnComment) 附件信息
+    @:/// </summary>
+    @:public SysFile @(column.ExtendedPropertyName) { get; set; }
+    }
+    @:
+    }
+}
+@if (Model.ApiTreeFieldList.Count > 0) {
+foreach(var column in Model.ApiTreeFieldList) {
+@:/// <summary>
+@:/// @column.ColumnComment 树选择器输出参数
+@:/// </summary>
+@:public class Tree@(column.PropertyNameTrimEndId)Output : @(Model.ClassName)
+@:{
+    @:/// <summary>
+    @:/// 节点值
+    @:/// </summary>
+    @:public @column.NetType Value { get; set; }
+    @:
+    @:/// <summary>
+    @:/// 节点文本
+    @:/// </summary>
+    @:public string Label { get; set; }
+    @:
+    @:/// <summary>
+    @:/// 子集数据
+    @:/// </summary>
+    @:public List<Tree@(column.PropertyNameTrimEndId)Output> Children { get; set; }
+@:}
+@:
+}
+}
+@if (Model.ImportFieldList.Count > 0) {
+@:
+@:/// <summary>
+@:/// @(Model.BusName)数据导入模板实体
+@:/// </summary>
+@:public class Export@(Model.ClassName)Output : Import@(Model.ClassName)Input
+@:{
+@:    [ImporterHeader(IsIgnore = true)]
+@:    [ExporterHeader(IsIgnore = true)]
+@:    public override string Error { get; set; }
+@:}
+}

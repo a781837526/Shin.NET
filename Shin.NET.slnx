@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/00-插件/">
+    <Project Path="Plugins/Shin.Plugin.ApprovalFlow/Shin.Plugin.ApprovalFlow.csproj" Id="e3bc2011-6276-4709-bbd0-af3c1d0f008a" />
+    <Project Path="Plugins/Shin.Plugin.DingTalk/Shin.Plugin.DingTalk.csproj" Id="708be169-7a0e-4f1a-b1de-de458bf6b1c3" />
+    <Project Path="Plugins/Shin.Plugin.GoView/Shin.Plugin.GoView.csproj" Id="65170af5-78ae-4ff3-b00d-8c252509620a" />
+    <Project Path="Plugins/Shin.Plugin.K3Cloud/Shin.Plugin.K3Cloud.csproj" Id="ab8f0727-4e8c-4c08-a4f3-c38673922626" />
+    <Project Path="Plugins/Shin.Plugin.ReZero/Shin.Plugin.ReZero.csproj" Id="14b5c878-593c-4537-9130-fd37bb4f2d1b" />
+    <Project Path="Plugins/Shin.Plugin.WorkWeixin/Shin.Plugin.WorkWeixin.csproj" Id="4ff92cbc-70cd-444e-948d-c76af9dbda55" />
+  </Folder>
+  <Folder Name="/01-架构核心/">
+    <Project Path="Core/Shin.Core/Shin.Core.csproj" />
+  </Folder>
+  <Folder Name="/02-应用服务/" />
+  <Folder Name="/02-应用服务/00-Common/">
+    <Project Path="Modules/Common/Shin.Common/Shin.Common.csproj" Id="8196724f-5872-45d7-aac1-795c801dd6df" />
+  </Folder>
+  <Folder Name="/02-应用服务/99-DemoApplication/">
+    <Project Path="Modules/DemoApplication/Shin.Application.Entity/Shin.Application.Entity.csproj" Id="212d4024-2b16-49bd-b0d6-c50e97838b76" />
+    <Project Path="Modules/DemoApplication/Shin.Application.Interface/Shin.Application.Interface.csproj" Id="64f6f81d-aa1d-4a80-84a2-22b26cb4fe72" />
+    <Project Path="Modules/DemoApplication/Shin.Application/Shin.Application.csproj" Id="30f98482-10e8-4842-b7d5-ba08e623e2ef" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="Shin.Web.Core/Shin.Web.Core.csproj" Id="28025548-99b0-4bd5-9257-38403c464e78" />
+  <Project Path="Shin.Web.Entry/Shin.Web.Entry.csproj" Id="e304c64a-0449-441d-94ab-29b601712cfa" />
+</Solution>

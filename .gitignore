@@ -1,0 +1,41 @@
+# Build and Release Folders
+bin-debug/
+bin-release/
+[Oo]bj/
+[Bb]in/
+
+# Other files and folders
+.settings/
+
+# Executables
+*.swf
+*.air
+*.ipa
+*.apk
+
+# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
+# should NOT be excluded as they contain compiler settings and other important
+# information for Eclipse / Flash Builder.
+/.vs
+/packages
+/Shin.Web.Entry/wwwroot/[Uu]pload
+/Shin.Web.Entry/wwwroot/[Aa]vatar
+/Shin.Web.Entry/wwwroot/[Ss]ignature
+/Shin.Web.Entry/wwwroot/[Cc]odeGen
+/Shin.Web.Entry/wwwroot/is-cache
+/Shin.Web.Core/Shin.Web.Core.csproj.user
+/Shin.Web.Entry/Shin.Web.Entry.csproj.user
+/Shin.Web.Entry/Properties/PublishProfiles
+/Shin.Web.Entry/publish
+/Shin.Web.Entry/logs
+/Shin.Web.Entry/Shin.NET.db
+/Shin.Web.Entry/.config
+
+# folders
+.vs
+.idea
+.DS_Store
+/Shin.Web.Entry/Admin.NET.db-journal
+/Shin.sln.DotSettings.user
+*.user
+/.github

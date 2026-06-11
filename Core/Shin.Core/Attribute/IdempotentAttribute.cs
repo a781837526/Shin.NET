@@ -1,0 +1,114 @@
+﻿// ------------------------------------------------------------------------
+// Shin开发平台
+// 版 本：V1.0
+// 版 权：Shin
+// 作 者：Shin
+// 邮 箱：shin_l@126.com
+// ------------------------------------------------------------------------
+
+using Newtonsoft.Json;
+using System.Security.Claims;
+
+namespace Shin.Core;
+
+/// <summary>
+/// 防止重复请求过滤器特性(此特性使用了分布式锁，需确保系统支持分布式锁)
+/// </summary>
+[SuppressSniffer]
+[AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = true)]
+public class IdempotentAttribute : Attribute, IAsyncActionFilter
+{
+    /// <summary>
+    /// 请求间隔时间/秒
+    /// </summary>
+    public int IntervalTime { get; set; } = 5;
+
+    /// <summary>
+    /// 错误提示内容
+    /// </summary>
+    public string Message { get; set; } = "你操作频率过快，请稍后重试！";
+
+    /// <summary>
+    /// 缓存前缀: Key+请求路由+用户Id+请求参数
+    /// </summary>
+    public string CacheKey { get; set; } = CacheConst.KeyIdempotent;
+
+    /// <summary>
+    /// 是否直接抛出异常：Ture是，False返回上次请求结果
+    /// </summary>
+    public bool ThrowBah { get; set; }
+
+    /// <summary>
+    /// 锁前缀
+    /// </summary>
+    public string LockPrefix { get; set; } = "lock_";
+
+    public IdempotentAttribute()
+    {
+    }
+
+    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    {
+        var httpContext = context.HttpContext;
+        var path = httpContext.Request.Path.Value.ToString();
+        var userId = httpContext.User?.FindFirstValue(ClaimConst.UserId);
+        var cacheExpireTime = TimeSpan.FromSeconds(IntervalTime);
+
+        var parameters = JsonConvert.SerializeObject(context.ActionArguments, Formatting.None, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Include,
+            DefaultValueHandling = DefaultValueHandling.Include
+        });
+
+        string cacheKey = CacheKey + MD5Encryption.Encrypt($"{path}{userId}{parameters}");
+        ICacheManager cacheManager = App.GetService<ICacheManager>();
+        try
+        {
+            // 分布式锁
+            using var distributedLock = cacheManager.BeginCacheLock($"{LockPrefix}{cacheKey}") ?? throw Oops.Oh(Message);
+
+            var cacheValue = cacheManager.Get<ResponseData>(cacheKey);
+            if (cacheValue != null)
+            {
+                if (ThrowBah) throw Oops.Oh(Message);
+                context.Result = new ObjectResult(cacheValue.Value);
+                return;
+            }
+            else
+            {
+                var resultContext = await next();
+                // 缓存请求结果,null值不缓存
+                if (resultContext.Result is ObjectResult { Value: { } } objectResult)
+                {
+                    var typeName = objectResult.Value.GetType().Name;
+                    var responseData = new ResponseData
+                    {
+                        Type = typeName,
+                        Value = objectResult.Value
+                    };
+                    cacheManager.Set(cacheKey, responseData, cacheExpireTime);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw Oops.Oh($"{Message}-{ex}");
+        }
+    }
+
+    /// <summary>
+    /// 请求结果数据
+    /// </summary>
+    private class ResponseData
+    {
+        /// <summary>
+        /// 结果类型
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
+        /// 请求结果
+        /// </summary>
+        public dynamic Value { get; set; }
+    }
+}

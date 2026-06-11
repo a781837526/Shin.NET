@@ -1,0 +1,31 @@
+﻿// ------------------------------------------------------------------------
+// Shin开发平台
+// 版 本：V1.0
+// 版 权：Shin
+// 作 者：Shin
+// 邮 箱：shin_l@126.com
+// ------------------------------------------------------------------------
+
+using Shin.Core;
+using @Model.EntityNameSpace;
+
+namespace @(Model.NameSpace);
+
+/// <summary>
+/// @(Model.Description) 表种子数据
+/// </summary>
+public class @(Model.SeedDataName) : ISqlSugarEntitySeedData<@(Model.EntityName)>
+{
+    /// <summary>
+    /// 种子数据
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<@(Model.EntityName)> HasData()
+    {
+        return new List<@(Model.EntityName)> {
+            @foreach (var record in Model.RecordList) {
+            @:new() { @record },
+            }
+        };
+    }
+}

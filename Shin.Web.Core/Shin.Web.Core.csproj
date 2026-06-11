@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+		<NoWarn>1701;1702;1591</NoWarn>
+		<DocumentationFile></DocumentationFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<Copyright>Shin.NET</Copyright>
+		<Description>Shin.NET 通用权限开发平台</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="Configuration\**\*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Scalar.AspNetCore" Version="2.14.14" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.8" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Modules\DemoApplication\Shin.Application\Shin.Application.csproj" />
+		<ProjectReference Include="..\Plugins\Shin.Plugin.ApprovalFlow\Shin.Plugin.ApprovalFlow.csproj" />
+		<ProjectReference Include="..\Plugins\Shin.Plugin.DingTalk\Shin.Plugin.DingTalk.csproj" />
+		<ProjectReference Include="..\Plugins\Shin.Plugin.GoView\Shin.Plugin.GoView.csproj" />
+		<ProjectReference Include="..\Plugins\Shin.Plugin.WorkWeixin\Shin.Plugin.WorkWeixin.csproj" />
+	</ItemGroup>
+
+</Project>
