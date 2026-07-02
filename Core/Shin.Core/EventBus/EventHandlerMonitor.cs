@@ -8,15 +8,18 @@
 
 namespace Shin.Core;
 
+/// <summary>
+/// 事件处理器监视器
+/// </summary>
 public class EventHandlerMonitor : IEventHandlerMonitor
 {
-    public Task OnExecutingAsync(EventHandlerExecutingContext context)
+    public Task OnExecutingAsync(EventHandlerExecutingContext context, CancellationToken cancellationToken)
     {
         //_logger.LogInformation("执行之前：{EventId}", context.Source.EventId);
         return Task.CompletedTask;
     }
 
-    public Task OnExecutedAsync(EventHandlerExecutedContext context)
+    public Task OnExecutedAsync(EventHandlerExecutedContext context, CancellationToken cancellationToken)
     {
         //_logger.LogInformation("执行之后：{EventId}", context.Source.EventId);
 
