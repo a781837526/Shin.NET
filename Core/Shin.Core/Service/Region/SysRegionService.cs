@@ -133,12 +133,6 @@ public class SysRegionService : ISysRegionService
         var isExist = await _repository.IsAnyAsync(u => (u.Name == input.Name && u.Code == input.Code) && u.Id != sysRegion.Id);
         if (isExist) throw Oops.Oh(ErrorCodeEnum.R2002);
 
-        //// 父Id不能为自己的子节点
-        //var regionTreeList = await _sysRegionRep.AsQueryable().ToChildListAsync(u => u.Pid, input.Id, true);
-        //var childIdList = regionTreeList.Select(u => u.Id).ToList();
-        //if (childIdList.Contains(input.Pid))
-        //    throw Oops.Oh(ErrorCodeEnum.R2001);
-
         await _repository.AsUpdateable(input.Adapt<SysRegion>()).IgnoreColumns(true).ExecuteCommandAsync();
     }
 
