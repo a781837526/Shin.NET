@@ -28,8 +28,8 @@ public class LogJob : IJob
     {
         using var serviceScope = _scopeFactory.CreateScope();
 
-        var db = serviceScope.ServiceProvider.GetRequiredService<ISqlSugarClient>().CopyNew();
-        var sysConfigService = serviceScope.ServiceProvider.GetRequiredService<SysConfigService>();
+        var db = serviceScope.ServiceProvider.GetRequiredService<ISqlSugarRepository<SysLogVis>>().AsSugarClient().CopyNew();
+        var sysConfigService = serviceScope.ServiceProvider.GetRequiredService<ISysConfigService>();
 
         var daysAgo = await sysConfigService.GetConfigValue<int>(ConfigConst.SysLogRetentionDays); // 日志保留天数
         await db.Deleteable<SysLogVis>().Where(u => u.CreateTime < DateTime.Now.AddDays(-daysAgo)).ExecuteCommandAsync(stoppingToken); // 删除访问日志
