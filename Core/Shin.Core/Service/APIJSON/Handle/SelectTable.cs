@@ -114,6 +114,7 @@ internal class SelectTable : ISingleton
     /// <summary>
     /// 单表查询
     /// </summary>
+    /// <param name="queryObj">查询参数</param>
     /// <param name="nodeName">返回数据的节点名称  默认为 infos</param>
     public virtual JObject QuerySingle(JObject queryObj, string nodeName = "infos")
     {

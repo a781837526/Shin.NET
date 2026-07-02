@@ -38,16 +38,6 @@ public class SysFileService : ISysFileService
     private readonly UploadOptions _uploadOptions;
 
     /// <summary>
-    /// 配置接口
-    /// </summary>
-    private readonly IConfiguration _configuration;
-
-    /// <summary>
-    /// 自定义文件提供器
-    /// </summary>
-    private readonly INamedServiceProvider<ICustomFileProvider> _namedServiceProvider;
-
-    /// <summary>
     /// 自定义文件提供器
     /// </summary>
     private readonly ICustomFileProvider _customFileProvider;
@@ -67,26 +57,24 @@ public class SysFileService : ISysFileService
         INamedServiceProvider<ICustomFileProvider> namedServiceProvider,
         IConfiguration configuration)
     {
-        _namedServiceProvider = namedServiceProvider;
         _userManager = userManager;
         _repository = repository;
         _OSSProviderOptions = oSSProviderOptions.Value;
         _uploadOptions = uploadOptions.Value;
-        _configuration = configuration;
 
         // 简化提供者选择逻辑
-        if (_OSSProviderOptions.Enabled || _configuration["MultiOSS:Enabled"].ToBoolean())
+        if (_OSSProviderOptions.Enabled || configuration["MultiOSS:Enabled"].ToBoolean())
         {
             // 统一使用MultiOSSFileProvider处理所有OSS情况
-            _customFileProvider = _namedServiceProvider.GetService<ITransient>(nameof(MultiOSSFileProvider));
+            _customFileProvider = namedServiceProvider.GetService<ITransient>(nameof(MultiOSSFileProvider));
         }
-        else if (_configuration["SSHProvider:Enabled"].ToBoolean())
+        else if (configuration["SSHProvider:Enabled"].ToBoolean())
         {
-            _customFileProvider = _namedServiceProvider.GetService<ITransient>(nameof(SSHFileProvider));
+            _customFileProvider = namedServiceProvider.GetService<ITransient>(nameof(SSHFileProvider));
         }
         else
         {
-            _customFileProvider = _namedServiceProvider.GetService<ITransient>(nameof(DefaultFileProvider));
+            _customFileProvider = namedServiceProvider.GetService<ITransient>(nameof(DefaultFileProvider));
         }
     }
 

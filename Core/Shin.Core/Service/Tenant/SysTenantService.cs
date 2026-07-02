@@ -51,12 +51,14 @@ public class SysTenantService : ISysTenantService, IDynamicApiController, ITrans
         IOptions<UploadOptions> uploadOptions,
         ISysRoleMenuService sysRoleMenuService,
         ISysConfigService sysConfigService,
+        ISysMenuService sysMenuService,
         ICacheManager cacheManager)
     {
         _repository = repository;
         _cacheManager = cacheManager;
         _uploadOptions = uploadOptions.Value;
         _sysConfigService = sysConfigService;
+        _sysMenuService = sysMenuService;
         _sysRoleMenuService = sysRoleMenuService;
     }
 

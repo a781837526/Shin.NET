@@ -22,7 +22,7 @@ public partial class WechatApiClientFactory : ISingleton
     public WechatApiClientFactory(IHttpClientFactory httpClientFactory, IOptions<WechatOptions> wechatOptions, ICacheManager cacheManager)
     {
         _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-        _wechatOptions = wechatOptions.Value ?? throw new ArgumentNullException(nameof(wechatOptions));
+        _wechatOptions = wechatOptions.Value;
         _cacheManager = cacheManager;
     }
 

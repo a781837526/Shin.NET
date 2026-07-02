@@ -838,11 +838,10 @@ public static partial class Extensions
                 else
                     propertyInfo.SetValue(sumItem, sumValue);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (propertyInfo.PropertyType == typeof(string))
                     propertyInfo.SetValue(sumItem, "合计");
-                continue;
             }
         }
         dataSource.Add(sumItem);
@@ -886,38 +885,31 @@ public static partial class Extensions
     /// <returns></returns>
     public static T ToEntity<T>(this DataRow dRow) where T : class
     {
-        try
+        List<string> drItems = new List<string>(dRow.ItemArray.Length);
+        for (int i = 0; i < dRow.ItemArray.Length; i++)
         {
-            List<string> drItems = new List<string>(dRow.ItemArray.Length);
-            for (int i = 0; i < dRow.ItemArray.Length; i++)
+            drItems.Add(dRow.Table.Columns[i].ColumnName.ToLower());
+        }
+        T model = Activator.CreateInstance<T>();
+        foreach (PropertyInfo pi in model.GetType().GetProperties(BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance))
+        {
+            if (drItems.Contains(pi.Name.ToLower()))
             {
-                drItems.Add(dRow.Table.Columns[i].ColumnName.ToLower());
-            }
-            T model = Activator.CreateInstance<T>();
-            foreach (PropertyInfo pi in model.GetType().GetProperties(BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance))
-            {
-                if (drItems.Contains(pi.Name.ToLower()))
+                if (pi.PropertyType.IsEnum) //属性类型是否表示枚举
                 {
-                    if (pi.PropertyType.IsEnum) //属性类型是否表示枚举
+                    object enumName = System.Enum.ToObject(pi.PropertyType, pi.GetValue(model, null));
+                    pi.SetValue(model, enumName, null); //获取枚举值，设置属性值
+                }
+                else
+                {
+                    if (!dRow[pi.Name].IsNullOrEmptyOrDBNull())
                     {
-                        object enumName = System.Enum.ToObject(pi.PropertyType, pi.GetValue(model, null));
-                        pi.SetValue(model, enumName, null); //获取枚举值，设置属性值
-                    }
-                    else
-                    {
-                        if (!dRow[pi.Name].IsNullOrEmptyOrDBNull())
-                        {
-                            pi.SetValue(model, MapNullableType(dRow[pi.Name], pi.PropertyType), null);
-                        }
+                        pi.SetValue(model, MapNullableType(dRow[pi.Name], pi.PropertyType), null);
                     }
                 }
             }
-            return model;
         }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
+        return model;
     }
 
     /// <summary>

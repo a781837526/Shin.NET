@@ -66,7 +66,7 @@ public static class CollectionHelper
 
         var properties = input.GetType().GetProperties();
         var fields = input.GetType().GetFields();
-        var members = properties.Cast<MemberInfo>().Concat(fields.Cast<MemberInfo>());
+        var members = properties.Concat(fields.Cast<MemberInfo>());
 
         return members.ToDictionary(m => m.Name, m => GetValue(input, m));
     }
