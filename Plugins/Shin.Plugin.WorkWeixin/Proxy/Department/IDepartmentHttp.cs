@@ -21,7 +21,7 @@ public interface IDepartmentHttp : IHttpDeclarative
     /// <param name="body"></param>
     /// <returns></returns>
     [Post("https://qyapi.weixin.qq.com/cgi-bin/department/create")]
-    Task<BaseWorkIdOutput> Create([Query("access_token")] string accessToken, [Body] DepartmentHttpInput body);
+    Task<BaseWorkIdOutput> Create([QueryParam("access_token")] string accessToken, [Body] DepartmentHttpInput body);
 
     /// <summary>
     /// 修改部门
@@ -31,7 +31,7 @@ public interface IDepartmentHttp : IHttpDeclarative
     /// <param name="body"></param>
     /// <returns></returns>
     [Post("https://qyapi.weixin.qq.com/cgi-bin/department/update")]
-    Task<BaseWorkOutput> Update([Query("access_token")] string accessToken, [Body] DepartmentHttpInput body);
+    Task<BaseWorkOutput> Update([QueryParam("access_token")] string accessToken, [Body] DepartmentHttpInput body);
 
     /// <summary>
     /// 删除部门
@@ -41,7 +41,7 @@ public interface IDepartmentHttp : IHttpDeclarative
     /// <param name="id"></param>
     /// <returns></returns>
     [Get("https://qyapi.weixin.qq.com/cgi-bin/department/delete")]
-    Task<BaseWorkOutput> Delete([Query("access_token")] string accessToken, [Query] long id);
+    Task<BaseWorkOutput> Delete([QueryParam("access_token")] string accessToken, [QueryParam] long id);
 
     /// <summary>
     /// 获取部门Id列表
@@ -51,7 +51,7 @@ public interface IDepartmentHttp : IHttpDeclarative
     /// <param name="id"></param>
     /// <returns></returns>
     [Get("https://qyapi.weixin.qq.com/cgi-bin/department/simplelist")]
-    Task<DepartmentIdOutput> SimpleList([Query("access_token")] string accessToken, [Query] long id);
+    Task<DepartmentIdOutput> SimpleList([QueryParam("access_token")] string accessToken, [QueryParam] long id);
 
     /// <summary>
     /// 获取部门详情
@@ -61,5 +61,5 @@ public interface IDepartmentHttp : IHttpDeclarative
     /// <param name="id"></param>
     /// <returns></returns>
     [Get("https://qyapi.weixin.qq.com/cgi-bin/department/get")]
-    Task<DepartmentOutput> Get([Query("access_token")] string accessToken, [Query] long id);
+    Task<DepartmentOutput> Get([QueryParam("access_token")] string accessToken, [QueryParam] long id);
 }
